@@ -848,17 +848,20 @@ function updateTabDisplay() {
 function updateTranscription() {
   const instrumento = document.getElementById('instrument-select').value;
   const container   = document.getElementById('transcription-list');
-  const empty       = document.getElementById('trans-empty');
+ 
+  // Remove everything except #trans-empty (keep it in DOM always)
+  Array.from(container.children).forEach(child => {
+    if (child.id !== 'trans-empty') child.remove();
+  });
+ 
+  const empty = document.getElementById('trans-empty');
  
   if (!melody.length) {
-    container.innerHTML = '';
-    container.appendChild(empty);
     empty.style.display = 'block';
     return;
   }
  
   empty.style.display = 'none';
-  container.innerHTML = '';
  
   melody.forEach((note, i) => {
     const name  = midiToName(note.midi);
